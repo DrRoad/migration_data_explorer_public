@@ -640,7 +640,7 @@ BetterCSVs = local({
          ##    to interpolate (true) missing values.
          ## 2) If there is enough data - `stl` requires a minimum of
          ##    period-length * 2 + 1
-         if(all(!is.na(dat_tsprep$Count)) && nrow(dat_tsprep) > 12 * 2){
+         if(all(!is.na(dat_tsprep$Count)) && all(dat_tsprep$Count > 0) && nrow(dat_tsprep) > 12 * 2){
             ## Coerce start-date to the required format for `ts`
             dstart = as.numeric(strsplit(format(min(dat_tsprep[[date_cname]]),
                "%Y-%m"), "-")[[1]])
