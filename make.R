@@ -1,6 +1,11 @@
 ####################################################################
 ## This should be run in the working directory of the source repo ##
 ####################################################################
+## If auto_git_commit == TRUE
+## After the copy process, the following is run:
+## git commit -a -m "copy from <internal commit hash>"
+auto_git_commit = TRUE
+# auto_git_commit = FALSE
 
 ## path defs, tweak if required
 repo_public = "migration_data_explorer_public"
@@ -51,4 +56,11 @@ for(cur_path in data_paths){
       }
       save(list = ls(cenv), envir = cenv, file = path_prel(cur_path))
    }
+}
+
+## Do an automatic git commit
+if(auto_git_commit){
+   int_log_n1 = system("git log --oneline -n 1", intern = TRUE)
+   int_hash = strsplit(int_log_n1, " ")[[1]][1]
+   system(paste0("git -C ../", repo_public, " commit -a -m \"copy from ", int_hash, "\""))
 }
