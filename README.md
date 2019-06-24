@@ -51,9 +51,10 @@ MBIE in a few ways:
    the version provided by MBIE (which applies rounding at the final
    step and thus does not introduce any additional errors).
 3. Google Analytics has been disabled and replaced with a dummy.
-4. The public version includes the scripts which are used to produce
+4. Fonts have been removed, as some are proprietary.
+5. The public version includes the scripts which are used to produce
    the public repo variation from the internal repo.
-5. The public version repo is a wholly separate repo, and does not
+6. The public version repo is a wholly separate repo, and does not
    share the commit history of the internal repo.
 
 Over time, the public version may also drift as updates to either
