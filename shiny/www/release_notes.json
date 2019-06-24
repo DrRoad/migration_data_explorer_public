@@ -1,0 +1,18 @@
+[
+   {
+      "date": "30 April 2019",
+      "title": "Relabelling of 'Study to Work' to 'Post Study Work'",
+      "desc": "We have relabelled the application substream 'Study to Work' as 'Post Study Work' for the Population and Visa Flows datasets. This is to keep it in line with other MBIE sources."
+   },
+   {
+      "date": "14 March 2019",
+      "title": "Revision to Recent Resident Figures",
+      "desc": "We have made improvements to the detection of residents who left NZ in the 90's and returned recently. These people were previously recorded as a 'recent resident' as we did not know when they were previously residents, but have now been removed from the 'recent resident' figure as they are returning old residents. For more details, refer to the related files.",
+      "rel_files": [
+         {
+            "name": "Previous vs Revised Recent Resident Figures (CSV, 7 KB)",
+            "path": "20190314_recent_resident_revision.csv"
+         }
+      ]
+   }
+]

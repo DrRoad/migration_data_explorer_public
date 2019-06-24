@@ -1,0 +1,30 @@
+[
+   {
+      ".applyTo": ["pop", "flow"],
+      "Nationality": "Nationality from visa application form or passport associated with the visa application.",
+      "Gender": "Gender details from visa application form or linked passports.",
+      "Age_Group": "Calculated for the given Date using Date of Birth from visa application form or linked passports."
+   },
+   {
+      ".applyTo": "pop",
+      ".dset": "Number of migrants in New Zealand, with breakdowns by visa type and demographic characteristics",
+      ".links": [["Visa_Type", "Application_Substream"], ["Visa_Type", "Application_Criteria"], ["Application_Substream", "Application_Criteria"]],
+      "Visa_Type": "The type of Visa the migrant has at the given Date.",
+      "Application_Substream": "A more detailed breakdown of Visa Type.",
+      "Application_Criteria": "A more detailed breakdown of Application Substream.",
+      "Applicant_Type": "Certain categories of visas allow Secondary Applicants to be included. These are partners and/or children of the Principal Applicant.",
+      "Date": "The population count date. All migrants who are in New Zealand with a valid visa on this date are counted as part of the population.",
+      "Count": "All migrants who are in New Zealand with a valid visa at the given Date are counted as part of the population. Random rounding is applied to protect privacy."
+   },
+   {
+      ".applyTo": "flow",
+      ".dset": "Measure of migrant movements in and out of Visa Categories and New Zealand, with breakdowns by visa type and demographic characteristics",
+      ".links": [["Visa_Flows", "Outflow_from"], ["Visa_Flows", "Inflow_to"]],
+      "Visa_Flows": "A combined Outflow_from and Inflow_to variable for convenience.",
+      "Outflow_from": "For migrants already in New Zealand this is the Visa Type that the migrant came from. Otherwise it is assumed they came from outside New Zealand.",
+      "Inflow_to": "For migrants remaining in New Zealand this is the Visa Type that the migrant transitions to. Otherwise it is assumed they have left New Zealand, unless we have information that they have passed away.",
+      "Application_Substream": "A more detailed breakdown of the Visa Type the migrant held on the given Date (or, where it is an outflow from New Zealand, what the migrant held before departure).",
+      "Date": "The latter of the two dates for which the flow was measured. All migrants in the population on this date, and the date previous, are compared. Any who have changed status are measured as a flow.",
+      "Count": "The number of migrants who changed status between the given date and the previous date."
+   }
+]

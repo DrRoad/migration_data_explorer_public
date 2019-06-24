@@ -1,0 +1,9 @@
+[
+   {
+      ".applyTo": ["A1(b)_arrivals","D1(b)_departures","LP1_limited_purpose_decisions","R1_residence_decisions","R4_residence_occupations","R7_residence_apps_accepted","R8_residence_apps_on_hand","RRV_returning_residence_decisions","S1_student_decisions","S7_student_first_time","V1_visitor_decisions","W1_work_decisions","W3_work_occupations"],
+      ".dset": "This is a dataset that was formerly available via the Immigration New Zealand Statistics page. Refer to the Help tab for more information.",
+      "Nationality": "Nationality from visa application form or passport associated with the visa application.",
+      "Gender": "Gender details from visa application form or passport associated with the visa application.",
+      "Age Range": "Age range at decision date using Date of Birth from visa application form or passport associated with the visa application."
+   }
+]

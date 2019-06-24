@@ -1,0 +1,83 @@
+.print-helper {
+   position: relative;
+   border: solid;
+   overflow: hidden;
+}
+
+/* Paper size defines
+   Generated via `PaperSizeCSS` in "print-helper.R" */
+.print-helper.paperA0.paperPortrait{width:831mm;height:1174mm;}
+.print-helper.paperA1.paperPortrait{width:584mm;height:826mm;}
+.print-helper.paperA2.paperPortrait{width:410mm;height:579mm;}
+.print-helper.paperA3.paperPortrait{width:287mm;height:405mm;}
+.print-helper.paperA4.paperPortrait{width:200mm;height:282mm;}
+.print-helper.paperA5.paperPortrait{width:138mm;height:195mm;}
+.print-helper.paperA0.paperLandscape{width:1179mm;height:826mm;}
+.print-helper.paperA1.paperLandscape{width:831mm;height:579mm;}
+.print-helper.paperA2.paperLandscape{width:584mm;height:405mm;}
+.print-helper.paperA3.paperLandscape{width:410mm;height:282mm;}
+.print-helper.paperA4.paperLandscape{width:287mm;height:195mm;}
+.print-helper.paperA5.paperLandscape{width:200mm;height:133mm;}
+/* END Paper size defines */
+
+.print-helper-texteditor {
+   position: absolute;
+   width: 540px;
+   display: none;
+}
+
+.ph-con {
+   position: absolute;
+   top: 10px;
+   left: 10px;
+   width: 600px;
+   height: 300px;
+   padding: 10px;
+   border: 2px dashed transparent;
+}
+
+.ph-con.ph-textcon {
+   height: 80px;
+   overflow: hidden;
+}
+
+.ph-sel-intent {
+   border: 2px dashed black;
+}
+.ph-sel-intent:hover {
+   background-color: #CCE0E3;
+}
+.ph-sel-intent.ph-sel-active {
+   border: 2px dotted black;
+   background-color: #E6EFF1;
+}
+.ph-sel-active .html-widget {
+   pointer-events: none;
+}
+
+.print-helper-inputs > .shiny-input-container {
+   float: left;
+   margin-right: 1em;
+   width: auto;
+}
+.print-helper-inputs::after{
+   content: '';
+   display: block; 
+   clear: both;
+}
+
+.print-helper-hidden {
+   visibility: hidden;
+}
+
+@media print {
+   .print-helper-inputs {
+      display: none;
+   }
+   .print-helper-hidden {
+      display: none;
+   }
+   .print-helper {
+      border: none;
+   }
+}

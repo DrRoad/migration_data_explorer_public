@@ -1,0 +1,224 @@
+/***********************************************
+** Styles required for ui-helpers.R functions **
+***********************************************/
+/*
+   tabPwT
+*/
+/* Styles for tabTitle, tabDesc and tabPwT */
+h3.tabTitle {
+   width: 100%;
+   text-align: center;
+   color: #4D4D4D;
+}
+.tabDesc {
+   max-width: 980px;
+   text-align: justify;
+   margin-left: auto;
+   margin-right: auto;
+}
+div.tabTitlePanel-end {
+   width: 100%;
+   background-image: url("breadcrumb-bg.png");
+   background-repeat: repeat-x;
+   height: 8px;
+   margin-bottom: 8px;
+}
+
+/******************
+** Navbar styles **
+*******************/
+/* These can be used with dashboardPage for a
+   navigation bar that better fits MBIE scheme. */
+
+/* Hide title and arrows */
+.navbar-header, .navbar-default .caret {
+   display: none;
+}
+
+/* Set fonts */
+.navbar-default .navbar-nav > li > a, .dropdown-menu > li > a {
+   font-family: 'Gustan', Helvetica, Arial, sans-serif;
+   font-size: 16px;
+   font-weight: 200;
+   color: #666666;
+}
+.navbar-default .navbar-nav > li.active > a, .dropdown-menu > li.active > a {
+   font-weight: 400;
+}
+
+/* Navbar background */
+.navbar-default {
+   background-color: transparent;
+   border-color: transparent;
+}
+/* .navbar-default:hover {
+   border-color: #e7e7e7;
+} */
+
+/* Top-level nav buttons */
+.navbar-default .navbar-nav > li {
+   border-top: 2px solid transparent;
+}
+.navbar-default .navbar-nav > li:hover {
+   border-image: linear-gradient(to right, #157BA3 0%, #96D602 100%) 1 1 stretch;
+   border-image-width: 1 0 0 0;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+   background-color: transparent;
+   text-decoration: underline;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+   background-color: transparent;
+}
+
+/* Drop-down navigation box */
+.dropdown-menu {
+   background-color: #e6e6e6;
+}
+/* Drop-down navigation buttons */
+.dropdown-menu > li > a:hover {
+   color: inherit;
+   background-color: inherit;
+   text-decoration: underline;
+}
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
+   color: inherit;
+   background-color: inherit;
+}
+
+/*****************
+** Other styles **
+*****************/
+/*
+   Override defaults
+*/
+/* By default, the rows created with "fixedRow"
+   have negative margins so that it is flush with the page edge.
+   But it looks nicer to restore the margins. */
+.row {
+   margin-right: 0px;
+   margin-left: 0px;
+}
+
+/*
+   Alternating rows
+*/
+/* For adding a white-ish and grey alternating background
+   to make it easier to distinguish between alternating rows. */
+div.row-alternating > div.altrow:nth-child(2n + 1) {
+   background-color: #FCFCFC;
+}
+div.row-alternating > div.altrow:nth-child(2n) {
+   background-color: #EAEAEA;
+}
+div.altrow {
+   padding: 10px;
+}
+
+/*
+   DIV styles
+*/
+/* Simple class to float a div.
+   The bottom padding ensures that if the div floats down,
+   there will be an appropriate gap between the divs. */
+div.float {
+   float: left;
+   padding-bottom: 10px;
+}
+/* Class for encapsulating a form of class "well" */
+div.divwell {
+   padding-right: 20px;
+   width: 280px;
+}
+/* Class for aligning to the right of a divwell.
+   Generally such alignment would be automatic with float,
+   but sometimes you may need to manually fix the alignment. */
+div.align-well {
+   margin-left: 280px;
+}
+/* A div usually sizes itself to match its contents,
+   but sometimes it is helpful to fix its width.
+   100% means it will use the entire width of its parent.
+   50% means it will use half the width, and so on.*/
+div.divfull {
+   width: 100%;
+}
+div.divhalf {
+   width: 50%;
+}
+/* Fixing a maximum width can be helpful in some cases.
+   One use is to allow a two-column floating layout on a
+   wide screen (as both columns can reach their max width
+   and may fit side-by-side on the page), while falling back
+   to a single-column layout when there is not enough width. */
+div.divfix700 {
+   max-width: 700px;
+}
+/* Originally created for plots, but a general-purpose
+   width specifying style.
+   When used with "float", a div with this style will float
+   to the right of a div with "float divwell", making full
+   use of the width to the right of the divwell. */
+div.divplot {
+   width: -moz-calc(100% - 280px);
+   width: -webkit-calc(100% - 280px);
+   width: calc(100% - 280px);
+}
+
+/*
+   Styles for dygraphs
+*/
+/* By having dygraph draw its legend into a div
+   of class "dylegend", this style will apply
+   a distinctive style for the highlighted series. */
+div.dylegend > span.highlight {
+   font-weight: bold;
+}
+/* If the "dylegend" div is nested inside a "divwell" div,
+   these styles grant a bit more width to the dylegend
+   (using up some of the padding/margins of the divwell),
+   and applies further effects to make the highlighted
+   series even more distinctive. */
+div.divwell div.dylegend {
+   margin-right: -18px;
+}
+div.divwell div.dylegend > span.highlight {
+   padding-left: 0.5em;
+   border-left: 0.5em solid #666;
+}
+/* dygraph labels are drawn in HTML, and so can
+   be styled with css. The labels are a bit large,
+   so this style tones it down a little. */
+div.dygraph-label {
+   font-size: small;
+}
+
+/*
+   Sub-headings
+*/
+/* A sub-heading designed for use inside a divwell. */
+h3.input-header {
+   border: 1px solid #D3D3D3;
+   background: #E6E6E6;
+   padding-top: 0px;
+   padding-left: 4px;
+	font-size: 110%;
+   line-height: 1.5;
+}
+
+/*
+   checkboxComboInput
+*/
+/* Applies some margins to the All checkbox
+   for a better look. */
+div.checkboxcombo div.checkboxcombo-all{
+   margin-top: 0px;
+   margin-bottom: 20px;
+}
+/* By applying a max-height and an overflow-y of auto,
+   if the check list gets very long, rather than a
+   very tall list, the user is given a scrollbar instead. */
+div.checkboxcombo div.shiny-options-group{
+   max-height: 230px;
+   overflow-y: auto;
+}
