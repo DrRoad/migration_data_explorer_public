@@ -460,6 +460,7 @@ div.subtab-text {
    padding: 4px;
    margin-top: -13px; /* for vertical centre: font-size/2 + padding */
    border-radius: 9px;
+   border-width: 0px;
    line-height: 0;
    cursor: pointer;
 }
@@ -467,15 +468,18 @@ div.subtab-text {
 .filsel-con:focus-within > .filsel-toggle {
    display: block;
 }
-.filsel-con > .filsel-disable {
+.filsel-disable {
    background-color: #425D00;
    color: #ECF8CF;
 }
-.filsel-con > .filsel-enable {
+.filsel-enable {
    background-color: #8F3B00;
    color: #FFF0E6;
 }
-
+.filsel-toggle > .glyphicon {
+   margin-top: -1px;
+   padding-bottom: 1px;
+}
 .filsel-con[data-disable] > .filsel {
    background-color: #5E2F97;
    color: #AAAAAA;

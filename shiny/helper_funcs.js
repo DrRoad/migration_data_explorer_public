@@ -1332,9 +1332,10 @@ var HelperFuncs = function(){
             
             /* enable/disable hover button */
             $("<button>", {
-               type: "button", class: "btn filsel-toggle filsel-disable",
+               type: "button", class: "filsel-toggle filsel-disable",
                "title": "Disable filter",
-               "data-titleold": "Enable filter"
+               "data-title-enable": "Enable filter",
+               "data-title-disable": "Disable filter"
             })
                .append($("<i>", {class: "glyphicon glyphicon-ok-circle"}))
                .appendTo(con).on("click.toggle", out.togglebtn(con));
@@ -1348,40 +1349,49 @@ var HelperFuncs = function(){
             return con;
          };
          
-         out.disable = function(con){
+         out.disable = function(con, send){
             con.attr("data-disable", "disable");
-            out.send();
+            if(send !== false){
+               out.send();
+            }
          };
-         out.enable = function(con){
+         out.enable = function(con, send){
             con.removeAttr("data-disable");
-            out.send();
+            if(send !== false){
+               out.send();
+            }
+         };
+         out.disablebtn = function(con, send){
+            var btn = con.find(".filsel-toggle");
+            btn
+               .attr("title", btn.attr("data-title-enable"))
+               .removeClass("filsel-disable")
+               .addClass("filsel-enable")
+               .children("i")
+                  .removeClass("glyphicon-ok-circle")
+                  .addClass("glyphicon-ban-circle");
+            out.disable(con, send);
+         };
+         out.enablebtn = function(con, send){
+            var btn = con.find(".filsel-toggle");
+            btn
+               .attr("title", btn.attr("data-title-disable"))
+               .removeClass("filsel-enable")
+               .addClass("filsel-disable")
+               .children("i")
+                  .removeClass("glyphicon-ban-circle")
+                  .addClass("glyphicon-ok-circle");
+            out.enable(con, send);
          };
          out.togglebtn = function(con){
             return function(e){
                e.stopPropagation();
                var to_disable = $(this).hasClass("filsel-disable");
-               var cur_title = $(this).attr("title");
-               var new_title = $(this).attr("data-titleold");
-               $(this)
-                  .attr("title", new_title)
-                  .attr("data-titleold", cur_title);
                
                if(to_disable){
-                  $(this)
-                     .removeClass("filsel-disable")
-                     .addClass("filsel-enable")
-                     .children("i")
-                        .removeClass("glyphicon-ok-circle")
-                        .addClass("glyphicon-ban-circle");
-                  out.disable(con);
+                  out.disablebtn(con);
                } else{
-                  $(this)
-                     .removeClass("filsel-enable")
-                     .addClass("filsel-disable")
-                     .children("i")
-                        .removeClass("glyphicon-ban-circle")
-                        .addClass("glyphicon-ok-circle");
-                  out.enable(con);
+                  out.enablebtn(con);
                }
             };
          };
@@ -1402,6 +1412,11 @@ var HelperFuncs = function(){
             set_filsel(con, "var", cond.vname, false);
             set_filsel(con, "type", cond.vtype, false);
             set_filsel(con, "val", cond.vvals, false);
+            if(cond.disable === true){
+               out.disablebtn(con, false);
+            } else{
+               out.enablebtn(con, false);
+            }
             out.send();
             
             return con;
@@ -1433,7 +1448,6 @@ var HelperFuncs = function(){
                If the condition is invalid, returns undefined.
                Otherwise, returns an Array containing an Object.
             */
-            if(con.attr("data-disable") !== undefined){return;}
             var vname = hef.findkind(con, "var").val();
             if(vname === ""){return;}
             var vtype = hef.findkind(con, "type").val();
@@ -1442,10 +1456,16 @@ var HelperFuncs = function(){
             var vvals = JSON.parse(hef.findkind(con, "val").val());
             if(vvals.length === 0){return;}
             
-            return [{vname: vname, vtype: vtype, vvals: vvals}];
+            var res = {vname: vname, vtype: vtype, vvals: vvals};
+            
+            if(con.attr("data-disable") !== undefined){
+               res.disable = true;
+            }
+            
+            return [res];
          };
          
-         out.collect = function(){
+         out.collect = function(only_enabled){
             /* collect
                Collect all valid conditions.
                Procedure:
@@ -1461,6 +1481,10 @@ var HelperFuncs = function(){
                .map(function(){return out.get($(this));})
                .get();
             
+            if(only_enabled === true){
+               all_conds = all_conds.filter(function(x){return x.disable !== true;});
+            }
+            
             if(all_conds.length === 0){all_conds = null;}
             
             return all_conds;
@@ -1475,7 +1499,7 @@ var HelperFuncs = function(){
                   structure from processing by Shiny's own methods
                3) Send as a character string to Shiny
             */
-            var all_conds = out.collect();
+            var all_conds = out.collect(true);
             
             /* Send message to Shiny */
             Shiny.onInputChange(makeid_bare("conds"), JSON.stringify(all_conds));
