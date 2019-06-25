@@ -1330,6 +1330,12 @@ var HelperFuncs = function(){
                con.attr("data-retrieve", "true");
             }
             
+            /* enable/disable hover button */
+            $("<i>", {
+               tabindex: 0,
+               class: "filsel-toggle glyphicon filsel-disable glyphicon-ban-circle"
+            }).appendTo(con).on("click.toggle", out.togglebtn(con));
+            
             /* finish */
             if(silent !== true){
                con.click();
@@ -1337,6 +1343,30 @@ var HelperFuncs = function(){
             }
             
             return con;
+         };
+         
+         out.disable = function(con){
+            
+         };
+         out.enable = function(con){
+            
+         };
+         out.togglebtn = function(con){
+            return function(e){
+               e.stopPropagation();
+               var to_disable = $(this).hasClass("filsel-disable");
+               if(to_disable){
+                  $(this)
+                     .removeClass("filsel-disable glyphicon-ban-circle")
+                     .addClass("filsel-enable glyphicon-ok-circle");
+                  out.disable(con);
+               } else{
+                  $(this)
+                     .removeClass("filsel-enable glyphicon-ok-circle")
+                     .addClass("filsel-disable glyphicon-ban-circle");
+                  out.enable(con);
+               }
+            };
          };
          
          out.set = function(cond, con){

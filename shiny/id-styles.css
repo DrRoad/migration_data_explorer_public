@@ -436,6 +436,7 @@ div.subtab-text {
    background-color: #6935AA;
 }
 .filsel-con {
+   position: relative;
    border: 1px solid #ddd;
    border-width: 1px 0;
    border-radius: 0;
@@ -448,6 +449,29 @@ div.subtab-text {
 }
 .filsel-con:hover {
    background-color: #F1EBF8;
+}
+
+.filsel-con > .filsel-toggle {
+   display: none;
+   position: absolute;
+   right: 4px;
+   top: 50%;
+   font-size: 16px;
+   padding: 4px;
+   margin-top: -12px; /* font-size/2 + padding */
+   border-radius: 8px;
+}
+.filsel-con:hover > .filsel-toggle,
+.filsel-con:focus-within > .filsel-toggle {
+   display: block;
+}
+.filsel-con > .filsel-disable {
+   background-color: #8F3B00;
+   color: #FFF0E6;
+}
+.filsel-con > .filsel-enable {
+   background-color: #425D00;
+   color: #ECF8CF;
 }
 
 .panel-heading[title] {
