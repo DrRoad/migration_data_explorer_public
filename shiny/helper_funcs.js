@@ -1330,15 +1330,10 @@ var HelperFuncs = function(){
                con.attr("data-retrieve", "true");
             }
             
-            /* enable/disable hover button */
-            $("<button>", {
-               type: "button", class: "filsel-toggle filsel-disable",
-               "title": "Disable filter",
-               "data-title-enable": "Enable filter",
-               "data-title-disable": "Disable filter"
-            })
-               .append($("<i>", {class: "glyphicon glyphicon-ok-circle"}))
-               .appendTo(con).on("click.toggle", out.togglebtn(con));
+            /* toggle button */
+            togglebtn.make()
+               .appendTo(con)
+               .on("click.toggle", togglebtn.click(con));
             
             /* finish */
             if(silent !== true){
@@ -1350,51 +1345,103 @@ var HelperFuncs = function(){
          };
          
          out.disable = function(con, send){
+            /* disable
+               Set the "data-disable" attribute, which the other
+                functions use to tell if a condition should be disabled.
+               Only the existence of the attribute is currently checked,
+                so the value does not matter.
+            */
             con.attr("data-disable", "disable");
             if(send !== false){
                out.send();
             }
          };
          out.enable = function(con, send){
+            /* enable
+               Clear the "data-disable" attribute.
+            */
             con.removeAttr("data-disable");
             if(send !== false){
                out.send();
             }
          };
-         out.disablebtn = function(con, send){
-            var btn = con.find(".filsel-toggle");
-            btn
-               .attr("title", btn.attr("data-title-enable"))
-               .removeClass("filsel-disable")
-               .addClass("filsel-enable")
-               .children("i")
-                  .removeClass("glyphicon-ok-circle")
-                  .addClass("glyphicon-ban-circle");
-            out.disable(con, send);
-         };
-         out.enablebtn = function(con, send){
-            var btn = con.find(".filsel-toggle");
-            btn
-               .attr("title", btn.attr("data-title-disable"))
-               .removeClass("filsel-enable")
-               .addClass("filsel-disable")
-               .children("i")
-                  .removeClass("glyphicon-ban-circle")
-                  .addClass("glyphicon-ok-circle");
-            out.enable(con, send);
-         };
-         out.togglebtn = function(con){
-            return function(e){
-               e.stopPropagation();
-               var to_disable = $(this).hasClass("filsel-disable");
+         
+         var togglebtn = function(){
+            /* togglebtn
+               Handles the functionality for the toggle filter button,
+                that enables users to easily toggle a filter on/off.
                
-               if(to_disable){
-                  out.disablebtn(con);
-               } else{
-                  out.enablebtn(con);
-               }
+               togglebtn is an IIFE that returns the Object: "tob"
+            */
+            var tob = {};
+            
+            tob.disable = function(con, send){
+               /* disable
+                  Make the necessary ui changes, then
+                   call `out.disable`.
+               */
+               var btn = con.find(".filsel-toggle");
+               btn
+                  .attr("title", btn.attr("data-title-enable"))
+                  .removeClass("filsel-disable")
+                  .addClass("filsel-enable")
+                  .children("i")
+                     .removeClass("glyphicon-ok-circle")
+                     .addClass("glyphicon-ban-circle");
+               out.disable(con, send);
             };
-         };
+            
+            tob.enable = function(con, send){
+               /* enable
+                  Make the necessary ui changes, then
+                   call `out.enable`.
+               */
+               var btn = con.find(".filsel-toggle");
+               btn
+                  .attr("title", btn.attr("data-title-disable"))
+                  .removeClass("filsel-enable")
+                  .addClass("filsel-disable")
+                  .children("i")
+                     .removeClass("glyphicon-ban-circle")
+                     .addClass("glyphicon-ok-circle");
+               out.enable(con, send);
+            };
+            
+            tob.click = function(con){
+               /* click
+                  Returns the onclick function to bind to the button,
+                   for the given container.
+               */
+               return function(e){
+                  e.stopPropagation();
+                  var to_disable = $(this).hasClass("filsel-disable");
+                  
+                  if(to_disable){
+                     tob.disable(con);
+                  } else{
+                     tob.enable(con);
+                  }
+               };
+            };
+            
+            tob.make = function(){
+               /* make
+                  Create the ui button element.
+                  This function just creates the element. It's `out.add`
+                   that actually uses this to add the button to a
+                   condition container and bind the events.
+               */
+               return $("<button>", {
+                  type: "button", class: "filsel-toggle filsel-disable",
+                  "title": "Disable filter",
+                  "data-title-enable": "Enable filter",
+                  "data-title-disable": "Disable filter"
+               }).append($("<i>", {class: "glyphicon glyphicon-ok-circle"}));
+            };
+            
+            return tob;
+         }();
+         out.togglebtn = togglebtn;
          
          out.set = function(cond, con){
             /* set
@@ -1413,9 +1460,9 @@ var HelperFuncs = function(){
             set_filsel(con, "type", cond.vtype, false);
             set_filsel(con, "val", cond.vvals, false);
             if(cond.disable === true){
-               out.disablebtn(con, false);
+               togglebtn.disable(con, false);
             } else{
-               out.enablebtn(con, false);
+               togglebtn.enable(con, false);
             }
             out.send();
             
