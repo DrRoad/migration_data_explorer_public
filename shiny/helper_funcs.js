@@ -1332,8 +1332,8 @@ var HelperFuncs = function(){
             
             /* enable/disable hover button */
             $("<i>", {
-               tabindex: 0,
-               class: "filsel-toggle glyphicon filsel-disable glyphicon-ban-circle"
+               tabindex: 0, title: "Disable filter", "data-titleold": "Enable filter",
+               class: "filsel-toggle glyphicon filsel-disable glyphicon-ok-circle"
             }).appendTo(con).on("click.toggle", out.togglebtn(con));
             
             /* finish */
@@ -1346,24 +1346,32 @@ var HelperFuncs = function(){
          };
          
          out.disable = function(con){
-            
+            con.attr("data-disable", "disable");
+            out.send();
          };
          out.enable = function(con){
-            
+            con.removeAttr("data-disable");
+            out.send();
          };
          out.togglebtn = function(con){
             return function(e){
                e.stopPropagation();
                var to_disable = $(this).hasClass("filsel-disable");
+               var cur_title = $(this).attr("title");
+               var new_title = $(this).attr("data-titleold");
+               $(this)
+                  .attr("title", new_title)
+                  .attr("data-titleold", cur_title);
+               
                if(to_disable){
                   $(this)
-                     .removeClass("filsel-disable glyphicon-ban-circle")
-                     .addClass("filsel-enable glyphicon-ok-circle");
+                     .removeClass("filsel-disable glyphicon-ok-circle")
+                     .addClass("filsel-enable glyphicon-ban-circle");
                   out.disable(con);
                } else{
                   $(this)
-                     .removeClass("filsel-enable glyphicon-ok-circle")
-                     .addClass("filsel-disable glyphicon-ban-circle");
+                     .removeClass("filsel-enable glyphicon-ban-circle")
+                     .addClass("filsel-disable glyphicon-ok-circle");
                   out.enable(con);
                }
             };
@@ -1410,18 +1418,19 @@ var HelperFuncs = function(){
             out.send();
          };
          
-         out.get = function(sel){
+         out.get = function(con){
             /* get
                Retrieve the condition values from the given container.
                If the condition is invalid, returns undefined.
                Otherwise, returns an Array containing an Object.
             */
-            var vname = hef.findkind(sel, "var").val();
+            if(con.attr("data-disable") !== undefined){return;}
+            var vname = hef.findkind(con, "var").val();
             if(vname === ""){return;}
-            var vtype = hef.findkind(sel, "type").val();
+            var vtype = hef.findkind(con, "type").val();
             if(vtype === ""){return;}
             
-            var vvals = JSON.parse(hef.findkind(sel, "val").val());
+            var vvals = JSON.parse(hef.findkind(con, "val").val());
             if(vvals.length === 0){return;}
             
             return [{vname: vname, vtype: vtype, vvals: vvals}];

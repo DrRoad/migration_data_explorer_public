@@ -456,22 +456,22 @@ div.subtab-text {
    position: absolute;
    right: 4px;
    top: 50%;
-   font-size: 16px;
+   font-size: 18px;
    padding: 4px;
-   margin-top: -12px; /* font-size/2 + padding */
-   border-radius: 8px;
+   margin-top: -13px; /* for vertical centre: font-size/2 + padding */
+   border-radius: 9px;
 }
 .filsel-con:hover > .filsel-toggle,
 .filsel-con:focus-within > .filsel-toggle {
    display: block;
 }
 .filsel-con > .filsel-disable {
-   background-color: #8F3B00;
-   color: #FFF0E6;
-}
-.filsel-con > .filsel-enable {
    background-color: #425D00;
    color: #ECF8CF;
+}
+.filsel-con > .filsel-enable {
+   background-color: #8F3B00;
+   color: #FFF0E6;
 }
 
 .panel-heading[title] {
