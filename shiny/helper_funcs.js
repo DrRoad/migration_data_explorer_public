@@ -1331,10 +1331,13 @@ var HelperFuncs = function(){
             }
             
             /* enable/disable hover button */
-            $("<i>", {
-               tabindex: 0, title: "Disable filter", "data-titleold": "Enable filter",
-               class: "filsel-toggle glyphicon filsel-disable glyphicon-ok-circle"
-            }).appendTo(con).on("click.toggle", out.togglebtn(con));
+            $("<button>", {
+               type: "button", class: "btn filsel-toggle filsel-disable",
+               "title": "Disable filter",
+               "data-titleold": "Enable filter"
+            })
+               .append($("<i>", {class: "glyphicon glyphicon-ok-circle"}))
+               .appendTo(con).on("click.toggle", out.togglebtn(con));
             
             /* finish */
             if(silent !== true){
@@ -1365,13 +1368,19 @@ var HelperFuncs = function(){
                
                if(to_disable){
                   $(this)
-                     .removeClass("filsel-disable glyphicon-ok-circle")
-                     .addClass("filsel-enable glyphicon-ban-circle");
+                     .removeClass("filsel-disable")
+                     .addClass("filsel-enable")
+                     .children("i")
+                        .removeClass("glyphicon-ok-circle")
+                        .addClass("glyphicon-ban-circle");
                   out.disable(con);
                } else{
                   $(this)
-                     .removeClass("filsel-enable glyphicon-ban-circle")
-                     .addClass("filsel-disable glyphicon-ok-circle");
+                     .removeClass("filsel-enable")
+                     .addClass("filsel-disable")
+                     .children("i")
+                        .removeClass("glyphicon-ban-circle")
+                        .addClass("glyphicon-ok-circle");
                   out.enable(con);
                }
             };

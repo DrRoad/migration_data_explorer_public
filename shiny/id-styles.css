@@ -460,6 +460,8 @@ div.subtab-text {
    padding: 4px;
    margin-top: -13px; /* for vertical centre: font-size/2 + padding */
    border-radius: 9px;
+   line-height: 0;
+   cursor: pointer;
 }
 .filsel-con:hover > .filsel-toggle,
 .filsel-con:focus-within > .filsel-toggle {
@@ -472,6 +474,12 @@ div.subtab-text {
 .filsel-con > .filsel-enable {
    background-color: #8F3B00;
    color: #FFF0E6;
+}
+
+.filsel-con[data-disable] > .filsel {
+   background-color: #5E2F97;
+   color: #AAAAAA;
+   text-decoration: line-through;
 }
 
 .panel-heading[title] {
