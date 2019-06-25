@@ -1330,6 +1330,11 @@ var HelperFuncs = function(){
                con.attr("data-retrieve", "true");
             }
             
+            /* toggle button */
+            togglebtn.make()
+               .appendTo(con)
+               .on("click.toggle", togglebtn.click(con));
+            
             /* finish */
             if(silent !== true){
                con.click();
@@ -1338,6 +1343,105 @@ var HelperFuncs = function(){
             
             return con;
          };
+         
+         out.disable = function(con, send){
+            /* disable
+               Set the "data-disable" attribute, which the other
+                functions use to tell if a condition should be disabled.
+               Only the existence of the attribute is currently checked,
+                so the value does not matter.
+            */
+            con.attr("data-disable", "disable");
+            if(send !== false){
+               out.send();
+            }
+         };
+         out.enable = function(con, send){
+            /* enable
+               Clear the "data-disable" attribute.
+            */
+            con.removeAttr("data-disable");
+            if(send !== false){
+               out.send();
+            }
+         };
+         
+         var togglebtn = function(){
+            /* togglebtn
+               Handles the functionality for the toggle filter button,
+                that enables users to easily toggle a filter on/off.
+               
+               togglebtn is an IIFE that returns the Object: "tob"
+            */
+            var tob = {};
+            
+            tob.disable = function(con, send){
+               /* disable
+                  Make the necessary ui changes, then
+                   call `out.disable`.
+               */
+               var btn = con.find(".filsel-toggle");
+               btn
+                  .attr("title", btn.attr("data-title-enable"))
+                  .removeClass("filsel-disable")
+                  .addClass("filsel-enable")
+                  .children("i")
+                     .removeClass("glyphicon-ok-circle")
+                     .addClass("glyphicon-ban-circle");
+               out.disable(con, send);
+            };
+            
+            tob.enable = function(con, send){
+               /* enable
+                  Make the necessary ui changes, then
+                   call `out.enable`.
+               */
+               var btn = con.find(".filsel-toggle");
+               btn
+                  .attr("title", btn.attr("data-title-disable"))
+                  .removeClass("filsel-enable")
+                  .addClass("filsel-disable")
+                  .children("i")
+                     .removeClass("glyphicon-ban-circle")
+                     .addClass("glyphicon-ok-circle");
+               out.enable(con, send);
+            };
+            
+            tob.click = function(con){
+               /* click
+                  Returns the onclick function to bind to the button,
+                   for the given container.
+               */
+               return function(e){
+                  e.stopPropagation();
+                  var to_disable = $(this).hasClass("filsel-disable");
+                  
+                  if(to_disable){
+                     tob.disable(con);
+                  } else{
+                     tob.enable(con);
+                  }
+               };
+            };
+            
+            tob.make = function(){
+               /* make
+                  Create the ui button element.
+                  This function just creates the element. It's `out.add`
+                   that actually uses this to add the button to a
+                   condition container and bind the events.
+               */
+               return $("<button>", {
+                  type: "button", class: "filsel-toggle filsel-disable",
+                  "title": "Disable filter",
+                  "data-title-enable": "Enable filter",
+                  "data-title-disable": "Disable filter"
+               }).append($("<i>", {class: "glyphicon glyphicon-ok-circle"}));
+            };
+            
+            return tob;
+         }();
+         out.togglebtn = togglebtn;
          
          out.set = function(cond, con){
             /* set
@@ -1355,6 +1459,11 @@ var HelperFuncs = function(){
             set_filsel(con, "var", cond.vname, false);
             set_filsel(con, "type", cond.vtype, false);
             set_filsel(con, "val", cond.vvals, false);
+            if(cond.disable === true){
+               togglebtn.disable(con, false);
+            } else{
+               togglebtn.enable(con, false);
+            }
             out.send();
             
             return con;
@@ -1380,24 +1489,30 @@ var HelperFuncs = function(){
             out.send();
          };
          
-         out.get = function(sel){
+         out.get = function(con){
             /* get
                Retrieve the condition values from the given container.
                If the condition is invalid, returns undefined.
                Otherwise, returns an Array containing an Object.
             */
-            var vname = hef.findkind(sel, "var").val();
+            var vname = hef.findkind(con, "var").val();
             if(vname === ""){return;}
-            var vtype = hef.findkind(sel, "type").val();
+            var vtype = hef.findkind(con, "type").val();
             if(vtype === ""){return;}
             
-            var vvals = JSON.parse(hef.findkind(sel, "val").val());
+            var vvals = JSON.parse(hef.findkind(con, "val").val());
             if(vvals.length === 0){return;}
             
-            return [{vname: vname, vtype: vtype, vvals: vvals}];
+            var res = {vname: vname, vtype: vtype, vvals: vvals};
+            
+            if(con.attr("data-disable") !== undefined){
+               res.disable = true;
+            }
+            
+            return [res];
          };
          
-         out.collect = function(){
+         out.collect = function(only_enabled){
             /* collect
                Collect all valid conditions.
                Procedure:
@@ -1413,6 +1528,10 @@ var HelperFuncs = function(){
                .map(function(){return out.get($(this));})
                .get();
             
+            if(only_enabled === true){
+               all_conds = all_conds.filter(function(x){return x.disable !== true;});
+            }
+            
             if(all_conds.length === 0){all_conds = null;}
             
             return all_conds;
@@ -1427,7 +1546,7 @@ var HelperFuncs = function(){
                   structure from processing by Shiny's own methods
                3) Send as a character string to Shiny
             */
-            var all_conds = out.collect();
+            var all_conds = out.collect(true);
             
             /* Send message to Shiny */
             Shiny.onInputChange(makeid_bare("conds"), JSON.stringify(all_conds));
