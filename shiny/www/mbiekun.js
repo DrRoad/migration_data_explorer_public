@@ -256,8 +256,12 @@ var mbiekun = function(){
          /* All others that can simply be clicked */
          movesel = sel;
          actf = function(){
-            if(value !== "<clickonly>"){kun.signal(sel);}
-            sel.click();
+            if(!/<nosignal>/.test(value)){kun.signal(sel);}
+            if(/<focusonly>/.test(value)){
+               sel.focus();
+            } else{
+               sel.click();
+            }
             next();
          };
       }
