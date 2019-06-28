@@ -46,7 +46,7 @@ summarise_by_dplyr =
    }
 backname =
    ## Wrapper for reversing name-vector to vector-name.
-   function(x) structure(names(x), .Names = x)
+   function(x) structure(names(x), names = as.vector(x))
 mbie.cols2 =
    ## mbie.cols that supports more than 7 colours
    function(x = 1:7){
@@ -269,18 +269,29 @@ BetterCSVs = local({
    all_vnames = str_nodata
    
    ## Date options
-   ## date_kinds is used for the input
    ## date_cnames are the column names in the actual data
-   date_kinds = c(
-      "Financial Year" = "fy",
-      "Calendar Year" = "cy",
-      "Monthly" = "m"
-   )
+   ## date_kinds is used for the input labels
    date_cnames = c(
+      "m" = "Date",
+      "yem" = "Year Ended Mar",
       "fy" = "Financial Year",
-      "cy" = "Calendar Year",
-      "m" = "Date"
+      "yes" = "Year Ended Sep",
+      "cy" = "Calendar Year"
    )
+   ## Check for extra Year Ended column
+   if(sum(!csv_date_vars %in% date_cnames) == 1)
+      date_cnames["ye"] = csv_date_vars[!csv_date_vars %in% date_cnames]
+   ## More useful labels for date_kinds
+   date_kinds = backname(date_cnames)
+   names(date_kinds)[date_kinds == "m"] = "Monthly"
+   names(date_kinds)[date_kinds == "fy"] = "Financial Year (Year Ended Jun)"
+   names(date_kinds)[date_kinds == "cy"] = "Calendar Year (Year Ended Dec)"
+   names(date_kinds)[date_kinds == "yem"] = "12-mths ended Q1 (Year Ended Mar)"
+   names(date_kinds)[date_kinds == "yes"] = "12-mths ended Q3 (Year Ended Sep)"
+   if(any(date_kinds == "ye"))
+      names(date_kinds)[date_kinds == "ye"] =
+         paste("12-mths to Date", brac(names(date_kinds)[date_kinds == "ye"]))
+   
    ## Set column name where actual Date vectors are kept
    ## Used when we need to do actual date comparisons
    datereal_cname = date_cnames[["m"]]
@@ -538,7 +549,7 @@ BetterCSVs = local({
    ## 3) For any years with nMonths < 12, adjust the year label
    ##       e.g. "2017 Partial (Jan-Jul)"
    check_partial_years = function(curdat, datekind){
-      if(any(datekind == c("cy", "fy"))){
+      if(any(datekind != "m")){
          date_cname = date_cnames[[datekind]]
          d_datecheck = curdat %>%
             group_by_at(date_cname) %>%

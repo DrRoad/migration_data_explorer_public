@@ -35,8 +35,14 @@ feedback_div = div(
 ## Release schedule
 release_div = div(
    h6("Release Schedule"),
-   p("The data will generally be updated on the second Monday of each month."),
-   p("This is to ensure all the datasets the Data Explorer draws on are up-to-date with the previous month's data.")
+   p(
+      "The data will generally be updated on the second Monday of each month.",
+      "This is to ensure all the datasets the Data Explorer draws on are",
+      "up-to-date with the previous month's data."
+   ),
+   p(
+      "N.B. Releases that only update the data will not have an accompanying release note."
+   )
 )
 
 ## Seasonal adjustment text
@@ -211,8 +217,8 @@ flows_numbers = list(
    "work_to_res" = 1600
 ) %>% lapply(function(x) format(x, trim = TRUE, big.mark = ",", scientific = FALSE))
 helpp = div(class = "frontp",
-   div(id = "m_release_notes"),
    release_div,
+   div(id = "m_release_notes"),
    h3("Population"),
    p("This is a measure of the number of migrants in New Zealand, with breakdowns by visa type and demographic characteristics, at specific points in time."),
    p(

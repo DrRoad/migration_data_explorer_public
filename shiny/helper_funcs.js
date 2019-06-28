@@ -261,7 +261,9 @@ var HelperFuncs = function(){
       */
       
       if(sel.hasClass("shiny-input-radiogroup")){
-         return sel.find(":checked").siblings("span").text();
+         return sel.find(":checked").siblings("span")
+            .text()
+            .replace(/\s{2,}/g, " ");
       }
    };
    hef.upinp = function(sel, opts, presel){
@@ -2118,6 +2120,36 @@ var HelperFuncs = function(){
          
          /* Update Titles */
          me.update_titles.init();
+         
+         /* HACK for datekinds for pop and flow
+            Sorry, not enough time to do it properly
+         */
+         $(makeid("dname")).on("change.datekindhack", function(){
+            var dname = get_dname();
+            var datekind_input = $(makeid("datekind"));
+            var datekind_notm_radio = datekind_input
+               .find("input")
+               .not("[value='m']")
+               .closest("div.radio");
+            if(["pop", "flow"].indexOf(dname) > -1){
+               hef.upval(datekind_input, "m");
+               datekind_notm_radio.css("display", "none");
+            } else{
+               datekind_notm_radio.css("display", "");
+            }
+         });
+         /* Add a linebreak to datekind labels */
+         $(makeid("datekind"))
+            .find("div.radio")
+            .find("span")
+            .each(function(){
+               var old_html = $(this).html();
+               var new_html = old_html.replace(
+                  / \(Year Ended/,
+                  "<br/>" + "&nbsp;".repeat(3) + "(Year Ended"
+               );
+               $(this).html(new_html);
+            });
          
          /* apply defs */
          if(typeof defs_apply === "object"){

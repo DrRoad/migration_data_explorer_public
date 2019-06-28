@@ -59,7 +59,9 @@ release_notes_apply = function(){
             $("<li>")
                .append($("<a>", {
                   text: x.name,
-                  href: x.path
+                  href: x.path,
+                  target: "_blank",
+                  rel: "noreferrer"
                }))
                .appendTo(rel_ul);
          });

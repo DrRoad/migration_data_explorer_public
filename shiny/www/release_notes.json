@@ -1,5 +1,16 @@
 [
    {
+      "date": "24 June 2019",
+      "title": "Public release of code repository",
+      "desc": "The public version of the Migration Data Explorer code repository has been released.",
+      "rel_files": [
+         {
+            "name": "URL to the Public Repository (GitHub)",
+            "path": "https://github.com/nz-mbie/migration_data_explorer_public"
+         }
+      ]
+   },
+   {
       "date": "30 April 2019",
       "title": "Relabelling of 'Study to Work' to 'Post Study Work'",
       "desc": "We have relabelled the application substream 'Study to Work' as 'Post Study Work' for the Population and Visa Flows datasets. This is to keep it in line with other MBIE sources."
